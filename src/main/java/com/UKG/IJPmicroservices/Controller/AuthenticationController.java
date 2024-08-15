@@ -29,7 +29,7 @@ public class AuthenticationController {
     @PostMapping(path="/login")
     public ResponseEntity<EmployeeModel> login(@RequestBody LoginDTO req){
         try{
-            return new ResponseEntity<>(authService.login(req),HttpStatus.FOUND);
+            return new ResponseEntity(authService.login(req),HttpStatus.FOUND);
         }
         catch(AuthenticationException e){
             return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);

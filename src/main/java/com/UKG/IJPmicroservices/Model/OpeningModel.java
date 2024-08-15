@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="Opening Table")
+@Table(name="Openings_Table")
 public class OpeningModel {
     @Id
     @GeneratedValue

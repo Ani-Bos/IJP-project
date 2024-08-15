@@ -7,11 +7,12 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="Job Table")
+@Table(name="Job_Table")
 public class JobModel {
     @Id
     @GeneratedValue
-    private long JobId;
+    private long jobId;
+    private String description;
     private double salary;
     @OneToOne
     private OpeningModel openings;

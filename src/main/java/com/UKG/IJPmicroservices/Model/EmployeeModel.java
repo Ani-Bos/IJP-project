@@ -13,7 +13,7 @@ public class EmployeeModel {
     @GeneratedValue
     private long empID;
     private String empName;
-    private String empRole;  // changed EmpRole to empRole
+    private String empRole;
     private Boolean isAdmin;
 
     private String username;

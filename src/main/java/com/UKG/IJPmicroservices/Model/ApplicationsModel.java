@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="Applications Table")
+@Table(name="Applications_Table")
 public class ApplicationsModel {
     @Id
     @GeneratedValue
