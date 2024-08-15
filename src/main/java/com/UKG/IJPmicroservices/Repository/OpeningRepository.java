@@ -1,9 +1,9 @@
-package com.UKG.IJPmicroservices.Repositories;
+package com.UKG.IJPmicroservices.Repository;
 
 import com.UKG.IJPmicroservices.Model.OpeningModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OpeningInterface extends JpaRepository<OpeningModel, Long> {
+public interface OpeningRepository extends JpaRepository<OpeningModel, Long> {
 }

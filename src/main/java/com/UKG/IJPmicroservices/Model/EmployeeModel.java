@@ -7,13 +7,18 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Employee Table")
+@Table(name = "Employee_Table")
 public class EmployeeModel {
     @Id
     @GeneratedValue
-    private long EmpID;
-    private String EmpName;
-    private String EmpRole;
+    private long empID;
+    private String empName;
+    private String empRole;  // changed EmpRole to empRole
+    private Boolean isAdmin;
+
+    private String username;
+    private String password;
+
     @OneToMany
     private List<ApplicationsModel> applications;
 }

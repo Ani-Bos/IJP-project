@@ -11,7 +11,8 @@ import java.util.List;
 public class OpeningModel {
     @Id
     @GeneratedValue
-    @ManyToOne
+    private long openingId;
+    @OneToOne
     @JoinColumn
     private JobModel job;
     @OneToMany

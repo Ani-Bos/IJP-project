@@ -13,6 +13,6 @@ public class JobModel {
     @GeneratedValue
     private long JobId;
     private double salary;
-    @OneToMany
-    private List<OpeningModel> openings;
+    @OneToOne
+    private OpeningModel openings;
 }
