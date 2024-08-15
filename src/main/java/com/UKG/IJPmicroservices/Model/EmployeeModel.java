@@ -7,11 +7,11 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Employee_Table")
+@Table(name = "employee")
 public class EmployeeModel {
     @Id
-    @GeneratedValue
-    private long empID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long empID;
     private String empName;
     private String empRole;  // changed EmpRole to empRole
     private Boolean isAdmin;
@@ -19,6 +19,7 @@ public class EmployeeModel {
     private String username;
     private String password;
 
-    @OneToMany
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ApplicationsModel> applications;
+
 }

@@ -5,15 +5,18 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="Applications Table")
+@Table(name="application")
 public class ApplicationsModel {
     @Id
-    @GeneratedValue
-    private  long ApplicationId;
-    @ManyToOne
-    @JoinColumn
-    private EmployeeModel Employee;
-    @ManyToOne
-    @JoinColumn
-    private OpeningModel Opening;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long applicationId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id", nullable = false)
+    private EmployeeModel employee;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "opening_id", nullable = false)
+    private OpeningModel opening;
+
 }
