@@ -36,7 +36,7 @@ public class OpeningController {
         try {
             // Assuming jobId exists in the database, you can handle the job association here
             OpeningModel createdOpening = openingService.addOpening(opening).getBody();
-            return new ResponseEntity<>(createdOpening, HttpStatus.CREATED);
+            return new ResponseEntity<>(createdOpening, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -53,7 +53,6 @@ public class OpeningController {
         }
     }
 
-    // Delete an opening
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOpening(@PathVariable Long id) {
         openingService.deleteOpening(id);

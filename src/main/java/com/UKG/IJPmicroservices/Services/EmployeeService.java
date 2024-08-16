@@ -2,6 +2,7 @@ package com.UKG.IJPmicroservices.Services;
 
 import com.UKG.IJPmicroservices.DTO.ApplicationDTO;
 import com.UKG.IJPmicroservices.DTO.EmployeeDTO;
+import com.UKG.IJPmicroservices.Exceptions.EmployeeExceptions;
 import com.UKG.IJPmicroservices.Model.ApplicationsModel;
 import com.UKG.IJPmicroservices.Model.EmployeeModel;
 import com.UKG.IJPmicroservices.Model.OpeningModel;
@@ -74,5 +75,12 @@ public class EmployeeService {
 
     public Optional<EmployeeModel> getEmployeeById(Long employeeId) {
         return employeeRepository.findById(employeeId);
+    }
+
+    public List<EmployeeModel>getAllEmployees(){
+        if(employeeRepository.findAll().size()==0){
+            throw new EmployeeExceptions("List is empty");
+        }
+        return employeeRepository.findAll();
     }
 }

@@ -18,11 +18,9 @@ public class JobController {
     public ResponseEntity<JobModel> addJob(@RequestBody JobModel jobModel) {
         try {
             JobModel createdJob = jobService.addJob(jobModel);
-            return new ResponseEntity<>(createdJob, HttpStatus.CREATED);
+            return new ResponseEntity<>(createdJob, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-
-    // Additional CRUD operations can be added here (e.g., getJob, updateJob, deleteJob)
 }
