@@ -28,6 +28,12 @@ public class EmployeeService {
     @Autowired
     private ApplicationsRepository applicationsRepository;
 
+    @Autowired
+    private NotificationProducer notificationProducer;
+
+    @Autowired
+    private EmailService emailService;
+
     public EmployeeDTO convertToDTO(EmployeeModel employee) {
         EmployeeDTO dto = new EmployeeDTO();
         dto.setEmpID(employee.getEmpID());
@@ -64,8 +70,17 @@ public class EmployeeService {
         application.setOpening(opening);
 
         applicationsRepository.save(application);
+        //sending notifications to rabbitmq
+        String message = "Employee " + employee.getEmpName()+ " with EmployeeID " + employee.getEmpID() +
+                "has applied for Job Opening" + opening.getDescription();
 
-        return ResponseEntity.ok("Application submitted successfully.");
+//        notificationProducer.sendNotifications(message);
+        List<EmployeeModel> admins = employeeRepository.findByIsAdmin(true);
+        for(EmployeeModel x: admins){
+            System.out.println("email is " + x.getUsername());
+            emailService.sendEmail(x.getUsername(),"New Job Application" , message);
+        }
+        return ResponseEntity.ok("Application submitted successfully and notification sent to admin");
     }
 
     public EmployeeModel addEmployee(EmployeeModel employee) {
