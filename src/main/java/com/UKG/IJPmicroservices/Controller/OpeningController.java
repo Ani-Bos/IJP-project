@@ -1,5 +1,6 @@
 package com.UKG.IJPmicroservices.Controller;
 
+import com.UKG.IJPmicroservices.DTO.OpeningDTO;
 import com.UKG.IJPmicroservices.Model.OpeningModel;
 import com.UKG.IJPmicroservices.Services.OpeningService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/openings")
@@ -18,16 +21,26 @@ public class OpeningController {
 
     // Get all openings
     @GetMapping("/all")
-    public ResponseEntity<List<OpeningModel>> getAllOpenings() {
-        return openingService.getAllOpenings();
+    public ResponseEntity<List<OpeningDTO>> getAllOpenings() {
+        List<OpeningDTO> openingDTOs = openingService.getAllOpenings();
+        return ResponseEntity.ok(openingDTOs);
     }
 
     // Get opening by ID
     @GetMapping("/{id}")
-    public ResponseEntity<OpeningModel> getOpeningById(@PathVariable Long id) {
-        return openingService.getOpeningById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<OpeningDTO> getOpeningById(@PathVariable Long id) {
+        Optional<OpeningModel> opening = openingService.getOpeningById(id);
+        return opening.map(o -> {
+            OpeningDTO dto = new OpeningDTO();
+            dto.setOpeningId(o.getOpeningId());
+            dto.setDescription(o.getDescription());
+            dto.setLastDateToApply(o.getLastDateToApply());
+            dto.setLocation(o.getLocation());
+            dto.setTitle(o.getTitle());
+            dto.setSkills(o.getSkills());
+            dto.setSalary(o.getSalary());
+            return ResponseEntity.ok(dto);
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     // Add a new opening
@@ -43,13 +56,27 @@ public class OpeningController {
     }
 
     // Update an existing opening
-    @PutMapping("/{id}")
-    public ResponseEntity<OpeningModel> updateOpening(@PathVariable Long id, @RequestBody OpeningModel updatedOpening) {
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<OpeningDTO> updateOpening(@PathVariable("id") Long id, @RequestBody OpeningModel updatedOpening) {
         try {
-            OpeningModel opening = openingService.updateOpening(id, updatedOpening);
-            return ResponseEntity.ok(opening);
+            Optional<OpeningModel> opening = openingService.updateOpening(id, updatedOpening);
+            if (opening != null) {
+                return opening.map(o -> {
+                    OpeningDTO dto = new OpeningDTO();
+                    dto.setOpeningId(o.getOpeningId());
+                    dto.setDescription(o.getDescription());
+                    dto.setLocation(o.getLocation());
+                    dto.setLastDateToApply(o.getLastDateToApply());
+                    dto.setTitle(o.getTitle());
+                    dto.setSkills(o.getSkills());
+                    dto.setSalary(o.getSalary());
+                    return ResponseEntity.ok(dto);
+                }).orElse(ResponseEntity.notFound().build());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

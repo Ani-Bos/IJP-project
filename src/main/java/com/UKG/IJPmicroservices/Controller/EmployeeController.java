@@ -1,7 +1,9 @@
 package com.UKG.IJPmicroservices.Controller;
 
+import com.UKG.IJPmicroservices.DTO.ApplicationDTO;
 import com.UKG.IJPmicroservices.DTO.EmployeeDTO;
 import com.UKG.IJPmicroservices.Exceptions.EmployeeExceptions;
+import com.UKG.IJPmicroservices.Model.ApplicationsModel;
 import com.UKG.IJPmicroservices.Model.EmployeeModel;
 import com.UKG.IJPmicroservices.Services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,16 @@ public class EmployeeController {
         return employeeService.getEmployeeById(employeeId)
                 .map(employee -> ResponseEntity.ok(employeeService.convertToDTO(employee)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{empId}/applications")
+    public ResponseEntity<List<ApplicationDTO>> getEmployeeApplications(@PathVariable Long empId) {
+        List<ApplicationDTO> applications = employeeService.getEmployeeApplications(empId);
+        if (applications != null) {
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
