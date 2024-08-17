@@ -28,6 +28,9 @@ public class EmployeeService {
     @Autowired
     private ApplicationRepository applicationRepository;
 
+    @Autowired
+    private EmailService emailService;
+
     public EmployeeDTO convertToDTO(EmployeeModel employee) {
         EmployeeDTO dto = new EmployeeDTO();
         dto.setEmpID(employee.getEmpID());
@@ -62,10 +65,15 @@ public class EmployeeService {
         ApplicationsModel application = new ApplicationsModel();
         application.setEmployee(employee);
         application.setOpening(opening);
-
         applicationRepository.save(application);
-
-        return ResponseEntity.ok("Application submitted successfully.");
+        String message = "Employee " + employee.getEmpName() + " with EmployeeID " + employee.getEmpID() +
+                " has applied for Job Opening: " + opening.getDescription();
+        List<EmployeeModel> admins = employeeRepository.findByIsAdmin(true);
+        for (EmployeeModel admin : admins) {
+            System.out.println("email sent to admin emails like " + admin.getUsername());
+            emailService.sendEmail(admin.getUsername(), "New Job Application", message);
+        }
+        return ResponseEntity.ok("Application submitted successfully and notification sent.");
     }
 
     public EmployeeModel addEmployee(EmployeeModel employee) {
