@@ -53,13 +53,20 @@ public class OpeningService {
         return new ResponseEntity<>(openingRepository.save(opening),HttpStatus.CREATED);
     }
 
-    public OpeningModel updateOpening(Long openingId, OpeningModel updatedOpening) {
-        return openingRepository.findById(openingId).map(opening -> {
-            opening.setDescription(updatedOpening.getDescription());
-            opening.setJob(updatedOpening.getJob());
+    public Optional<OpeningModel> updateOpening(Long openingId, OpeningModel updatedOpening) {
+        return Optional.ofNullable(openingRepository.findById(openingId).map(opening -> {
+            opening.setDescription(updatedOpening.getDescription() != null ? updatedOpening.getDescription() : opening.getDescription());
+            opening.setJob(updatedOpening.getJob() != null ? updatedOpening.getJob() : opening.getJob());
+            opening.setLastDateToApply(updatedOpening.getLastDateToApply() != null ? updatedOpening.getLastDateToApply() : opening.getLastDateToApply());
+            opening.setLocation(updatedOpening.getLocation() != null ? updatedOpening.getLocation() : opening.getLocation());
+            opening.setTitle(updatedOpening.getTitle() != null ? updatedOpening.getTitle() : opening.getTitle());
+            opening.setSkills(updatedOpening.getSkills() != null ? updatedOpening.getSkills() : opening.getSkills());
+            opening.setSalary(updatedOpening.getSalary() != null ? updatedOpening.getSalary() : opening.getSalary());
+
             return openingRepository.save(opening);
-        }).orElseThrow(() -> new RuntimeException("Opening not found with id " + openingId));
+        }).orElseThrow(() -> new RuntimeException("Opening not found with id " + openingId)));
     }
+
 
     public void deleteOpening(Long openingId) {
         openingRepository.deleteById(openingId);

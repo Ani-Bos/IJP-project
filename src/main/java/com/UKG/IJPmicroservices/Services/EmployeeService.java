@@ -6,7 +6,7 @@ import com.UKG.IJPmicroservices.Exceptions.EmployeeExceptions;
 import com.UKG.IJPmicroservices.Model.ApplicationsModel;
 import com.UKG.IJPmicroservices.Model.EmployeeModel;
 import com.UKG.IJPmicroservices.Model.OpeningModel;
-import com.UKG.IJPmicroservices.Repository.ApplicationsRepository;
+import com.UKG.IJPmicroservices.Repository.ApplicationRepository;
 import com.UKG.IJPmicroservices.Repository.EmployeeRepository;
 import com.UKG.IJPmicroservices.Repository.OpeningRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class EmployeeService {
     private OpeningRepository openingRepository;
 
     @Autowired
-    private ApplicationsRepository applicationsRepository;
+    private ApplicationRepository applicationRepository;
 
     public EmployeeDTO convertToDTO(EmployeeModel employee) {
         EmployeeDTO dto = new EmployeeDTO();
@@ -63,7 +63,7 @@ public class EmployeeService {
         application.setEmployee(employee);
         application.setOpening(opening);
 
-        applicationsRepository.save(application);
+        applicationRepository.save(application);
 
         return ResponseEntity.ok("Application submitted successfully.");
     }
@@ -82,5 +82,22 @@ public class EmployeeService {
             throw new EmployeeExceptions("List is empty");
         }
         return employeeRepository.findAll();
+    }
+
+    public List<ApplicationDTO> getEmployeeApplications(Long empId) {
+        EmployeeModel employee = employeeRepository.findById(empId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        List<ApplicationDTO> applicationDTOs = employee.getApplications().stream()
+                .map(app -> {
+                    ApplicationDTO applicationDTO = new ApplicationDTO();
+                    applicationDTO.setApplicationId(app.getApplicationId());
+                    applicationDTO.setOpeningId(app.getOpening().getOpeningId());
+                    applicationDTO.setEmpId(app.getEmployee().getEmpID());
+                    applicationDTO.setEmpName(app.getEmployee().getEmpName());
+                    applicationDTO.setEmpRole(app.getEmployee().getEmpRole());
+                    return applicationDTO;
+                }).toList();
+
+        return applicationDTOs;
     }
 }
