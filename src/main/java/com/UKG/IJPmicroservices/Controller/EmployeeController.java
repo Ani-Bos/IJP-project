@@ -1,6 +1,7 @@
 package com.UKG.IJPmicroservices.Controller;
 
 import com.UKG.IJPmicroservices.DTO.EmployeeDTO;
+import com.UKG.IJPmicroservices.Exceptions.EmployeeExceptions;
 import com.UKG.IJPmicroservices.Model.EmployeeModel;
 import com.UKG.IJPmicroservices.Services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,16 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @GetMapping(path="/all")
+    public ResponseEntity<List<EmployeeModel>>getAllEmployees(){
+        try{
+            return new ResponseEntity<List<EmployeeModel>>(employeeService.getAllEmployees(),HttpStatus.OK);
+        }
+        catch(EmployeeExceptions e){
+            return new ResponseEntity(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
+    }
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long employeeId) {

@@ -13,7 +13,7 @@ public class EmployeeModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long empID;
     private String empName;
-    private String empRole;  // changed EmpRole to empRole
+    private String empRole;
     private Boolean isAdmin;
 
     private String username;
