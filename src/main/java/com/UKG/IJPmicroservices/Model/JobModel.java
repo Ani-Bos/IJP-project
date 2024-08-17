@@ -8,6 +8,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
+
 @Entity
 @Table(name="job")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

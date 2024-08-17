@@ -1,5 +1,6 @@
 package com.UKG.IJPmicroservices.Services;
 
+import com.UKG.IJPmicroservices.DTO.OpeningDTO;
 import com.UKG.IJPmicroservices.Model.JobModel;
 import com.UKG.IJPmicroservices.Model.OpeningModel;
 import com.UKG.IJPmicroservices.Repository.JobRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OpeningService {
@@ -21,8 +23,18 @@ public class OpeningService {
     @Autowired
     private JobRepository jobRepository;
 
-    public ResponseEntity<List<OpeningModel>> getAllOpenings() {
-        return new ResponseEntity<>(openingRepository.findAll(), HttpStatus.FOUND);
+    public OpeningDTO convertToDTO (OpeningModel opening){
+        OpeningDTO dto = new OpeningDTO();
+        dto.setOpeningId(opening.getOpeningId());
+        dto.setDescription(opening.getDescription());
+        return dto;
+    }
+
+    public List<OpeningDTO> getAllOpenings() {
+        List<OpeningModel> openings = openingRepository.findAll();
+        return openings.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     public Optional<OpeningModel> getOpeningById(Long openingId) {

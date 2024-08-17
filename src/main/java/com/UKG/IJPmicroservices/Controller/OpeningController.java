@@ -1,5 +1,6 @@
 package com.UKG.IJPmicroservices.Controller;
 
+import com.UKG.IJPmicroservices.DTO.OpeningDTO;
 import com.UKG.IJPmicroservices.Model.OpeningModel;
 import com.UKG.IJPmicroservices.Services.OpeningService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/openings")
@@ -18,8 +20,9 @@ public class OpeningController {
 
     // Get all openings
     @GetMapping("/all")
-    public ResponseEntity<List<OpeningModel>> getAllOpenings() {
-        return openingService.getAllOpenings();
+    public ResponseEntity<List<OpeningDTO>> getAllOpenings() {
+        List<OpeningDTO> openingDTOs = openingService.getAllOpenings();
+        return ResponseEntity.ok(openingDTOs);
     }
 
     // Get opening by ID
